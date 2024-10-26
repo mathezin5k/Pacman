@@ -8,13 +8,46 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
     final int tamanhoBlocoOriginal = 16;
-    final int escala = 2;
-    final int blockSize = tamanhoBlocoOriginal * escala;
+    final double escala = 1.5;
+    final int blockSize = (int) (tamanhoBlocoOriginal * escala);
     
-    final int tamColuna = 30;
-    final int tamLinha = 20;
+    final int tamColuna = 31;
+    final int tamLinha = 28;
     final int larguraTela = blockSize * tamColuna;
     final int alturaTela = blockSize * tamLinha;
+    
+    int[][] labirinto = { // 1=parede 2-pilulas 2-caminhos livres  28x31
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+        {1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1},
+        {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0, 4, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1},
+        {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 0, 4, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1},
+        {1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1},
+        {1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 1, 1, 2, 1},
+        {1, 2, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1},
+        {1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+};
+
+
     
     int FPS = 60;
     boolean isAlive = true;
@@ -33,8 +66,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         
         pacman = new Pacman(100, 100, 4);
-        ghost = new Fantasmas(200, 200, 1);
-        ghost2 = new Fantasmas(150, 150, 1);
+        ghost = new Fantasmas(200, 200, 2);
+        ghost2 = new Fantasmas(150, 150, 2);
     }
     
     public void startGameThread() {
@@ -63,13 +96,31 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void update() {
-        pacman.update(keyH);
-        ghost.update(keyH);
-        ghost2.update(keyH);
+        pacman.update(keyH, pacman.posX, pacman.posY);
+        ghost.update(keyH, pacman.posX, pacman.posY);
+        ghost2.update(keyH, pacman.posX, pacman.posY);
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
+        for(int i = 0; i < tamLinha; i++){
+            for(int j = 0; j < tamColuna; j++){
+                if(labirinto[i][j] == 1){
+                    //parede
+                    g.setColor(Color.BLUE);
+                    g.fillRect(j * blockSize, i * blockSize, blockSize, blockSize);
+                }else if(labirinto[i][j] == 2){
+                    //pilula
+                    g.setColor(Color.WHITE);
+                    g.fillOval(j * blockSize + blockSize/4, i * blockSize + blockSize/4, blockSize/2, blockSize/2);
+                }else if(labirinto[i][j] == 0){
+                    //vazio 
+                    g.setColor(Color.BLACK);
+                    g.fillRect(j * blockSize, i * blockSize, blockSize, blockSize);
+                }         
+            }
+        }
         
         Graphics2D g2 = (Graphics2D) g;
         pacman.draw(g2, blockSize);

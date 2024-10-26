@@ -11,18 +11,22 @@ public class Fantasmas extends Personagens {
         super(startX, startY, speed);
     }
     
-    @Override
-    public void update(KeyHandler keyH) {
-        int dx = random.nextInt(3) - 1; // -1, 0 ou 1
-        int dy = random.nextInt(3) - 1;
+    public void update(KeyHandler keyH, int pacX, int pacY) {
+        int dx = pacX - posX;
+        int dy = pacY - posY;
         
-        posX += dx * speed;
-        posY += dy * speed;
+            // Movimenta-se em direção ao Pac-Man
+            if (Math.abs(dx) > Math.abs(dy)) {
+                posX += (dx > 0) ? speed : -speed; // Movimenta horizontalmente
+            } else {
+                posY += (dy > 0) ? speed : -speed; // Movimenta verticalmente
+            }
+        
     }
 
     @Override
     public void draw(Graphics2D g2, int blockSize) {
-        g2.setColor(Color.red);
+        g2.setColor(Color.RED);
         g2.fillRect(posX, posY, blockSize, blockSize);
     }
 }
