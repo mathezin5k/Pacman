@@ -8,13 +8,46 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
     final int tamanhoBlocoOriginal = 16;
-    final int escala = 2;
-    final int blockSize = tamanhoBlocoOriginal * escala;
+    final double escala = 1.5;
+    final int blockSize = (int) (tamanhoBlocoOriginal * escala);
     
-    final int tamColuna = 30;
-    final int tamLinha = 20;
-    final int larguraTela = blockSize * tamColuna;
-    final int alturaTela = blockSize * tamLinha;
+    final int tamColuna = 31;
+    final int tamLinha = 28;
+    final int larguraTela = (blockSize * tamColuna);
+    final int alturaTela = (blockSize * tamLinha);
+    
+    int[][] labirinto = { //28x31
+        {0, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 13, 0, 11, 0, 0, 0, 0, 10, 10, 10, 10, 0, 0, 10, 10, 10, 10, 0},
+        {13, 2, 2, 3, 2, 2, 2, 2, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 2, 2, 3, 11, 13, 2, 2, 2, 2, 11},
+        {13, 2, 17, 12, 15, 2, 17, 15, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 17, 15, 2, 16, 14, 2, 17, 15, 2, 11},
+        {13, 2, 11, 0, 13, 2, 11, 13, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 11, 13, 2, 2, 2, 2, 11, 13, 2, 11},
+        {13, 2, 11, 0, 13, 2, 11, 13, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 11, 0, 12, 12, 15, 2, 11, 13, 2, 11},
+        {13, 2, 16, 10, 14, 2, 16, 14, 2, 16, 10, 10, 10, 14, 0, 16, 10, 10, 10, 14, 2, 16, 10, 10, 10, 14, 2, 11, 13, 2, 11},
+        {13, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 11, 13, 2, 11},
+        {13, 2, 17, 12, 15, 2, 17, 12, 12, 12, 12, 12, 12, 15, 0, 17, 12, 12, 12, 15, 2, 17, 15, 2, 17, 12, 12, 0, 13, 2, 11},
+        {13, 2, 11, 0, 13, 2, 16, 10, 10, 0, 0, 10, 10, 14, 0, 16, 10, 10, 10, 14, 2, 11, 13, 2, 16, 10, 10, 0, 13, 2, 11},
+        {13, 2, 11, 0, 13, 2, 2, 2, 2, 11, 13, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 11, 13, 2, 2, 2, 2, 11, 13, 2, 11},
+        {13, 2, 11, 0, 13, 2, 17, 15, 2, 11, 13, 0, 17, 12, 12, 12, 15, 0, 17, 15, 2, 11, 13, 2, 17, 15, 2, 11, 13, 2, 11},
+        {13, 2, 16, 10, 14, 2, 11, 13, 2, 16, 14, 0, 11, 0, 0, 0, 13, 0, 11, 13, 2, 16, 14, 2, 11, 13, 2, 16, 14, 2, 11},
+        {13, 2, 2, 2, 2, 2, 11, 13, 2, 2, 0, 0, 11, 0, 0, 0, 13, 0, 11, 13, 2, 2, 2, 2, 11, 13, 2, 2, 2, 2, 11},
+        {0, 12, 12, 12, 15, 2, 11, 0, 12, 12, 15, 0, 4, 0, 0, 0, 13, 0, 11, 0, 12, 12, 15, 2, 11, 0, 12, 12, 15, 2, 11},
+        {0, 10, 10, 10, 14, 2, 11, 0, 10, 10, 14, 0, 4, 0, 0, 0, 13, 0, 11, 0, 10, 10, 14, 2, 11, 0, 10, 10, 14, 2, 11},
+        {13, 2, 2, 2, 2, 2, 11, 13, 2, 2, 0, 0, 11, 0, 0, 0, 13, 0, 11, 13, 2, 2, 2, 2, 11, 13, 2, 2, 2, 2, 11},
+        {13, 2, 17, 12, 15, 2, 11, 13, 2, 17, 15, 0, 11, 0, 0, 0, 13, 0, 11, 13, 2, 17, 15, 2, 11, 13, 2, 17, 15, 2, 11},
+        {13, 2, 11, 0, 13, 2, 16, 14, 2, 11, 13, 0, 16, 10, 10, 10, 14, 0, 16, 14, 2, 11, 13, 2, 16, 14, 2, 11, 13, 2, 11},
+        {13, 2, 11, 0, 13, 2, 2, 2, 2, 11, 13, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 11, 13, 2, 2, 2, 2, 11, 13, 2, 11},
+        {13, 2, 11, 0, 13, 2, 17, 12, 12, 0, 0, 12, 12, 15, 0, 17, 12, 12, 12, 15, 2, 11, 13, 2, 17, 12, 12, 0, 13, 2, 11},
+        {13, 2, 16, 10, 14, 2, 16, 10, 10, 10, 10, 10, 10, 14, 0, 16, 10, 10, 10, 14, 2, 16, 14, 2, 16, 10, 10, 0, 13, 2, 11},
+        {13, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 11, 13, 2, 11},
+        {13, 2, 17, 12, 15, 2, 17, 15, 2, 17, 12, 12, 12, 15, 0, 17, 12, 12, 12, 15, 2, 17, 12, 12, 12, 15, 2, 11, 13, 2, 11},
+        {13, 2, 11, 0, 13, 2, 11, 13, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 11, 0, 10, 10, 14, 2, 11, 13, 2, 11},
+        {13, 2, 11, 0, 13, 2, 11, 13, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 11, 13, 2, 2, 2, 2, 11, 13, 2, 11},
+        {13, 2, 16, 10, 14, 2, 16, 14, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 16, 14, 2, 17, 15, 2, 16, 14, 2, 11},
+        {13, 2, 2, 3, 2, 2, 2, 2, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 2, 2, 3, 11, 13, 2, 2, 2, 2, 11},
+        {0, 12, 12, 12, 12, 12, 12, 12, 12, 0, 0, 0, 0, 13, 0, 11, 0, 0, 0, 0, 12, 12, 12, 12, 0, 0, 12, 12, 12, 12, 0},
+};
+
+
     
     int FPS = 60;
     boolean isAlive = true;
@@ -24,6 +57,9 @@ public class GamePanel extends JPanel implements Runnable {
     Pacman pacman;
     Fantasmas ghost;
     Fantasmas ghost2;
+    Wall wall;
+    Pilula pilula;
+    Super superPil;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(larguraTela, alturaTela));
@@ -32,9 +68,12 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
         
-        pacman = new Pacman(100, 100, 4);
-        ghost = new Fantasmas(200, 200, 1);
-        ghost2 = new Fantasmas(150, 150, 1);
+        pacman = new Pacman(14 * blockSize, 21 * blockSize, 2, labirinto);
+        ghost = new Fantasmas(200, 200, 1, 0);
+        ghost2 = new Fantasmas(150, 150, 1, 2);
+        wall = new Wall();
+        pilula = new Pilula();
+        superPil = new Super();
     }
     
     public void startGameThread() {
@@ -63,15 +102,33 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void update() {
-        pacman.update(keyH);
-        ghost.update(keyH);
-        ghost2.update(keyH);
+        pacman.update(keyH, pacman.posX, pacman.posY);
+        ghost.update(keyH, pacman.posX, pacman.posY);
+        ghost2.update(keyH, pacman.posX, pacman.posY);
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
         Graphics2D g2 = (Graphics2D) g;
+        
+        for(int i = 0; i < tamLinha; i++){
+            for(int j = 0; j < tamColuna; j++){
+                if(labirinto[i][j] >= 8 && labirinto[i][j] <=21){
+                    //parede
+                    wall.draw(g2, j * blockSize, i * blockSize, blockSize, labirinto[i][j]);
+                }else if(labirinto[i][j] == 2){
+                    //pilula
+                    pilula.draw(g2, j * blockSize + blockSize/4, i * blockSize + blockSize/4, blockSize);
+                }else if(labirinto[i][j] == 0){
+                    //vazio 
+                    g.setColor(Color.BLACK);
+                    g.fillRect(j * blockSize, i * blockSize, blockSize, blockSize);
+                }else if(labirinto[i][j] == 3){
+                    //pilula super
+                    superPil.draw(g2, j * blockSize + blockSize/8, i * blockSize + blockSize/8, blockSize);
+                }
+            }
+        }
         pacman.draw(g2, blockSize);
         ghost.draw(g2, blockSize);
         ghost2.draw(g2, blockSize);
