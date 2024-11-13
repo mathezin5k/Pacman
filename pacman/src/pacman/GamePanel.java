@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
         {13, 2, 11, 0, 13, 2, 11, 13, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 11, 13, 2, 2, 2, 2, 11, 13, 2, 11},
         {13, 2, 11, 0, 13, 2, 11, 13, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 11, 0, 12, 12, 15, 2, 11, 13, 2, 11},
         {13, 2, 16, 10, 14, 2, 16, 14, 2, 16, 10, 10, 10, 14, 0, 16, 10, 10, 10, 14, 2, 16, 10, 10, 10, 14, 2, 11, 13, 2, 11},
-        {13, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 11, 13, 2, 11},
+        {13, 2, 2, 2, 2, 2, 2, 2, 2, 2,  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 11, 13, 2, 11},
         {13, 2, 17, 12, 15, 2, 17, 12, 12, 12, 12, 12, 12, 15, 0, 17, 12, 12, 12, 15, 2, 17, 15, 2, 17, 12, 12, 0, 13, 2, 11},
         {13, 2, 11, 0, 13, 2, 16, 10, 10, 0, 0, 10, 10, 14, 0, 16, 10, 10, 10, 14, 2, 11, 13, 2, 16, 10, 10, 0, 13, 2, 11},
         {13, 2, 11, 0, 13, 2, 2, 2, 2, 11, 13, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 11, 13, 2, 2, 2, 2, 11, 13, 2, 11},
@@ -46,8 +46,6 @@ public class GamePanel extends JPanel implements Runnable {
         {13, 2, 2, 3, 2, 2, 2, 2, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 2, 2, 3, 11, 13, 2, 2, 2, 2, 11},
         {0, 12, 12, 12, 12, 12, 12, 12, 12, 0, 0, 0, 0, 13, 0, 11, 0, 0, 0, 0, 12, 12, 12, 12, 0, 0, 12, 12, 12, 12, 0},
 };
-
-
     
     int FPS = 60;
     boolean isAlive = true;
@@ -69,8 +67,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         
         pacman = new Pacman(14 * blockSize, 21 * blockSize, 2, labirinto);
-        ghost = new Fantasmas(200, 200, 1, 0);
-        ghost2 = new Fantasmas(150, 150, 1, 2);
+        ghost = new Fantasmas(200, 200, 2, 0);
+        ghost2 = new Fantasmas(150, 150, 2, 1);
         wall = new Wall();
         pilula = new Pilula();
         superPil = new Super();
@@ -87,8 +85,7 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-
-        while (isAlive) {
+        while (pacman.isAlive) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
