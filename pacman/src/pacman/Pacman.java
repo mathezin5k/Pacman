@@ -42,27 +42,44 @@ public class Pacman extends Personagens {
             frameIndex = (frameIndex + 1) % 3;
             animationCounter = 0;
         }
-
+        
+        System.out.println("X "+posX+" --  Y"+posY);
         int nextX = posX;
         int nextY = posY;
 
         // Define direção, mas só altera se não for parede
         if (keyH.upPressed && isNotWall(map[(posY - speed) / 24][posX / 24])) {
-            direct = 0;
-            movingUp = true;
-            movingDown = movingLeft = movingRight = false;
-        } else if (keyH.downPressed && isNotWall(map[(posY + speed) / 24][posX / 24])) {
-            direct = 1;
-            movingDown = true;
-            movingUp = movingLeft = movingRight = false;
+            if(map[(posY / 24) + 1][(posX / 24)+1] != 16 && posX % 24 > 0){
+                movingUp = false;
+            }else if(posX % 24 == 0){
+                direct = 0;
+                movingUp = true;
+                movingDown = movingLeft = movingRight = false;
+            }
+        } else if (keyH.downPressed && isNotWall(map[(posY / 24) + 1][posX / 24])) {
+            if(map[(posY / 24) + 1][(posX / 24)+1] != 14 && posX % 24 > 0){
+                movingDown = false;
+            }else if(posX % 24 == 0){
+                direct = 1;
+                movingDown = true;
+                movingUp = movingLeft = movingRight = false;
+            }
         } else if (keyH.leftPressed && isNotWall(map[posY / 24][(posX - speed) / 24])) {
-            direct = 2;
-            movingLeft = true;
-            movingUp = movingDown = movingRight = false;
-        } else if (keyH.rightPressed && isNotWall(map[posY / 24][(posX + speed) / 24])) {
-            direct = 3;
-            movingRight = true;
-            movingUp = movingDown = movingLeft = false;
+            if(map[(posY / 24) + 1][(posX / 24)+1] != 14 && posY % 24 > 0){
+                movingLeft = false;
+            }else if(posY % 24 == 0){
+                direct = 2;
+                movingLeft = true;
+                movingUp = movingDown = movingRight = false;
+            }
+        } else if (keyH.rightPressed && isNotWall(map[posY / 24][(posX / 24) + 1])) {
+            if(map[(posY / 24) + 1][(posX / 24)+1] != 16 && posY % 24 > 0){
+                movingRight = false;
+            }else if(posY % 24 == 0){
+                direct = 3;
+                movingRight = true;
+                movingUp = movingDown = movingLeft = false;
+            }
         }
 
         // Movimenta conforme a direção atual se não houver parede
@@ -74,7 +91,7 @@ public class Pacman extends Personagens {
                 }
                 break;
             case 1: // Down
-                if (isNotWall(map[(posY + speed) / 24][posX / 24])) {
+                if (isNotWall(map[(posY + 24) / 24][posX / 24])) {
                     nextY += speed;
                     currentImage = (frameIndex == 0) ? down1 : (frameIndex == 1) ? down2 : down3;
                 }
@@ -86,7 +103,7 @@ public class Pacman extends Personagens {
                 }
                 break;
             case 3: // Right
-                if (isNotWall(map[posY / 24][(posX + speed) / 24])) {
+                if (isNotWall(map[posY / 24][(posX + 24) / 24])) {
                     nextX += speed;
                     currentImage = (frameIndex == 0) ? right1 : (frameIndex == 1) ? right2 : right3;
                 }
@@ -99,15 +116,9 @@ public class Pacman extends Personagens {
         int gridY = nextY / 24;
         int gridX = nextX / 24;
 
-        if (direct == 1 && nextY % 24 > 0) {
-            gridY++;
-        }
-        if (direct == 3 && nextX % 24 > 0) {
-            gridX++;
-        }
 
         // Verifica e coleta pílulas e super pílulas
-        if (gridX >= 0 && gridX < map[0].length && gridY >= 0 && gridY < map.length && isNotWall(map[gridY][gridX])) {
+        if (isNotWall(map[gridY][gridX])) {
             if (map[gridY][gridX] == PILL) {
                 map[gridY][gridX] = 0; // Marca a pílula como coletada
                 score += 10;
@@ -124,7 +135,7 @@ public class Pacman extends Personagens {
         int pacmanSize = (int)(blockSize * 0.9);
         g2.drawImage(currentImage, posX + (int)(blockSize * 0.1), posY + (int)(blockSize * 0.1), pacmanSize, pacmanSize, null);
     }
-
+    
     private boolean isNotWall(int block) {
         return block < WALL_MIN || block > WALL_MAX; // Retorna verdadeiro se não for uma parede
     }
