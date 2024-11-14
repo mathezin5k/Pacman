@@ -24,9 +24,11 @@ public class Pacman extends Personagens {
     private int score = 0;
     private boolean isSuper = false; // Status de super pílula
     public boolean isAlive = true;
-    public int lifes = 3;
+    private int lifes = 3;
     private int direct;
     private boolean movingUp, movingDown, movingLeft, movingRight;
+    long timeLimitInMilliseconds = 300;
+    long startTime = System.currentTimeMillis();
 
     public Pacman(int startX, int startY, int speed, int[][] map) {
         super(startX, startY, speed);
@@ -42,8 +44,7 @@ public class Pacman extends Personagens {
             frameIndex = (frameIndex + 1) % 3;
             animationCounter = 0;
         }
-        
-        System.out.println("X "+posX+" --  Y"+posY);
+        System.out.println(score);
         int nextX = posX;
         int nextY = posY;
 
@@ -128,6 +129,13 @@ public class Pacman extends Personagens {
                 score += 50;
             }
         }
+        if(score > 0){
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            if (elapsedTime >= timeLimitInMilliseconds) {
+                score -= 1;
+                startTime = System.currentTimeMillis();
+            }
+        }
     }
 
     @Override
@@ -165,5 +173,18 @@ public class Pacman extends Personagens {
 
     public boolean isSuper() {
         return isSuper;
+    }
+    
+    public int getLifes(){
+        return lifes;
+    }
+    
+    public void setLifes(int lifes){
+        this.lifes = lifes;
+    }
+    
+    public void setPosition(int pacX, int pacY){
+        posX = pacX;
+        posY = pacY;
     }
 }

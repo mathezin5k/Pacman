@@ -5,9 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.PriorityQueue;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import javax.imageio.ImageIO;
 
 public class Fantasmas extends Personagens implements Runnable {
+    Pacman pacman;
     BufferedImage ghost1, ghost2, ghost3, ghost4;
     BufferedImage currentImage;
     public int color;
@@ -25,8 +28,8 @@ public class Fantasmas extends Personagens implements Runnable {
         {1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
         {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
         {1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1},
-        {0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 4, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
-        {0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 4, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+        {0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+        {0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
         {1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1},
         {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
         {1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
@@ -43,10 +46,11 @@ public class Fantasmas extends Personagens implements Runnable {
 };
     private int pacX, pacY; // Coordenadas do Pac-Man
 
-    public Fantasmas(int startX, int startY, int speed, int color) {
+    public Fantasmas(int startX, int startY, int speed, int color, Pacman pacman) {
         super(startX, startY, speed);
         this.color = color;
         getGhostImage();
+        this.pacman = pacman;
         new Thread(this).start(); // Inicia a thread do fantasma
     }
     
@@ -79,6 +83,18 @@ public class Fantasmas extends Personagens implements Runnable {
         if (nextMove != null) { // Se há um caminho disponível
             posX += nextMove[0] * speed;
             posY += nextMove[1] * speed;
+        }
+        
+        if (posY == pacY && posX == pacX){
+            pacman.setLifes(pacman.getLifes() - 1);
+            pacman.setPosition(14*24, 21*24);
+            
+            posX = 24;
+            posY = 24;
+            
+            if(pacman.getLifes() == 0){
+                pacman.isAlive = false;
+            }
         }
     }
 

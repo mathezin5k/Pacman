@@ -54,7 +54,6 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     Pacman pacman;
     Fantasmas ghost;
-    Fantasmas ghost2;
     Wall wall;
     Pilula pilula;
     Super superPil;
@@ -67,8 +66,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         
         pacman = new Pacman(14 * blockSize, 21 * blockSize, 3, labirinto);
-        ghost = new Fantasmas(200, 200, 1, 0);
-        ghost2 = new Fantasmas(150, 150, 2, 1);
+        ghost = new Fantasmas(24, 24, 2, 1, pacman);
         wall = new Wall();
         pilula = new Pilula();
         superPil = new Super();
@@ -101,7 +99,6 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         pacman.update(keyH, pacman.posX, pacman.posY);
         ghost.update(keyH, pacman.posX, pacman.posY);
-        ghost2.update(keyH, pacman.posX, pacman.posY);
     }
 
     public void paintComponent(Graphics g) {
@@ -128,7 +125,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
         pacman.draw(g2, blockSize);
         ghost.draw(g2, blockSize);
-        ghost2.draw(g2, blockSize);
         g2.dispose();
     }
 }
