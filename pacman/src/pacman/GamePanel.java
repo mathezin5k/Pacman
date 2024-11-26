@@ -13,39 +13,8 @@ public class GamePanel extends JPanel implements Runnable {
     
     final int tamColuna = 31;
     final int tamLinha = 28;
-    final int larguraTela = (blockSize * tamColuna); //744
-    final int alturaTela = (blockSize * tamLinha); //672
-    
-    private final int[][] ghostMap ={ //28x31
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1},
-        {1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
-        {1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1},
-        {1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1},
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    };
+    final int larguraTela = (blockSize * tamColuna);
+    final int alturaTela = (blockSize * tamLinha);
     
     int[][] labirinto = { //28x31
         {0, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 13, 0, 11, 0, 0, 0, 0, 10, 10, 10, 10, 0, 0, 10, 10, 10, 10, 0},
@@ -77,30 +46,20 @@ public class GamePanel extends JPanel implements Runnable {
         {13, 2, 2, 3, 2, 2, 2, 2, 2, 11, 0, 0, 0, 13, 0, 11, 0, 0, 0, 13, 2, 2, 2, 3, 11, 13, 2, 2, 2, 2, 11},
         {0, 12, 12, 12, 12, 12, 12, 12, 12, 0, 0, 0, 0, 13, 0, 11, 0, 0, 0, 0, 12, 12, 12, 12, 0, 0, 12, 12, 12, 12, 0},
 };
-<<<<<<< Updated upstream
 
 
     
-=======
->>>>>>> Stashed changes
     int FPS = 60;
+    boolean isAlive = true;
     
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     Pacman pacman;
-<<<<<<< Updated upstream
     Fantasmas ghost;
     Fantasmas ghost2;
-=======
-    Blinky blinky;
-    Clyde clyde;
-    Pinky pinky;
->>>>>>> Stashed changes
     Wall wall;
     Pilula pilula;
     Super superPil;
-    Pathfinder pathfinder;
-    Sound sound = new Sound();
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(larguraTela, alturaTela));
@@ -110,21 +69,14 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         
         pacman = new Pacman(14 * blockSize, 21 * blockSize, 2, labirinto);
-<<<<<<< Updated upstream
         ghost = new Fantasmas(200, 200, 1, 0);
         ghost2 = new Fantasmas(150, 150, 1, 2);
-=======
-        pathfinder = new Pathfinder(ghostMap);
-        pinky = new Pinky(14 * blockSize, 13 * blockSize, 2, pathfinder, pacman);
-        blinky = new Blinky(14 * blockSize, 13 * blockSize, 2, pathfinder, pacman);
-        clyde = new Clyde(14 * blockSize, 13 * blockSize, 2, pathfinder, pacman);
->>>>>>> Stashed changes
         wall = new Wall();
         pilula = new Pilula();
         superPil = new Super();
     }
     
-    public void startGameThread(){
+    public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
@@ -135,14 +87,8 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-<<<<<<< Updated upstream
 
         while (isAlive) {
-=======
-        
-        
-        while (pacman.isAlive) {
->>>>>>> Stashed changes
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
@@ -156,20 +102,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void update() {
-<<<<<<< Updated upstream
         pacman.update(keyH, pacman.posX, pacman.posY);
         ghost.update(keyH, pacman.posX, pacman.posY);
         ghost2.update(keyH, pacman.posX, pacman.posY);
-=======
-        sound.playSound("Voicy_Ghost-Siren-sound.wav", 800);
-        pacman.update(keyH, pacman.posX, pacman.posY, blinky, clyde, pinky);
-        blinky.update(null, pacman.posX, pacman.posY, blinky, clyde,  pinky);
-        clyde.update(null, pacman.posX, pacman.posY, blinky, clyde, pinky);
-        pinky.update(null, pacman.posX, pacman.posY, blinky, clyde, pinky);
->>>>>>> Stashed changes
     }
 
-    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -193,14 +130,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         pacman.draw(g2, blockSize);
-<<<<<<< Updated upstream
         ghost.draw(g2, blockSize);
         ghost2.draw(g2, blockSize);
-=======
-        blinky.draw(g2, blockSize);
-        clyde.draw(g2, blockSize);
-        pinky.draw(g2, blockSize);
->>>>>>> Stashed changes
         g2.dispose();
     }
 }

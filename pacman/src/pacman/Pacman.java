@@ -12,9 +12,7 @@ public class Pacman extends Personagens {
     BufferedImage down1, down2, down3;
     BufferedImage right1, right2, right3;
     BufferedImage left1, left2, left3;
-    
-    Sound sound = new Sound();
-    
+
     private int[][] map; // Mapa de 28 x 31
     private int animationCounter = 0; // Contador para controle de animação
     private int frameIndex = 0; // Índice do frame da animação
@@ -27,17 +25,6 @@ public class Pacman extends Personagens {
     private final int EMPTY = 0;
     private int score = 0;
     private boolean isSuper = false; // Status de super pílula
-<<<<<<< Updated upstream
-=======
-    public boolean isAlive = true;
-    private int lifes = 3;
-    private int direct;
-    private boolean movingUp, movingDown, movingLeft, movingRight;
-    long timeLimitInMilliseconds = 300;
-    long timeLimitSuper = 5000;
-    long startTime = System.currentTimeMillis();
-    private long startSuperTime = 0;
->>>>>>> Stashed changes
 
     public Pacman(int startX, int startY, int speed, int[][] map) {
         super(startX, startY, speed);
@@ -46,19 +33,14 @@ public class Pacman extends Personagens {
         currentImage = right1; // Define a imagem inicial
     }
     @Override
-    public void update(KeyHandler keyH, int pacX, int pacY, Blinky blinky, Clyde clyde, Pinky pinky) {
+    public void update(KeyHandler keyH, int pacX, int pacY) {
         animationCounter++;
         if (animationCounter > 10) { // A cada 10 frames, troca de imagem
             frameIndex = (frameIndex + 1) % 3; // Alterna entre 0, 1, 2
             animationCounter = 0;
         }
-<<<<<<< Updated upstream
         System.out.println("X "+ posX + "Y " + posY);
 
-=======
-        System.out.println(score);
-        System.out.println(isSuper);
->>>>>>> Stashed changes
         int nextX = posX;
         int nextY = posY;
 
@@ -104,30 +86,12 @@ public class Pacman extends Personagens {
             if (map[gridY][gridX] == PILL) {
                 map[gridY][gridX] = 0; // Marca a pílula como coletada
                 score += 10;
-                sound.playSound("pacman_chomp.wav", 500);
             } else if (map[gridY][gridX] == SUPER_PILL) {
-                map[gridY][gridX] = 0;
+                map[gridY][gridX] = 0; // Marca a super pílula como coletada
                 isSuper = true;
-                startSuperTime = System.currentTimeMillis();
                 score += 50;
             }
         }
-<<<<<<< Updated upstream
-=======
-        if(score > 0){
-            long elapsedTime = System.currentTimeMillis() - startTime;
-            if (elapsedTime >= timeLimitInMilliseconds) {
-                score -= 1;
-                startTime = System.currentTimeMillis();
-            }
-        }
-        if (isSuper) {
-            long elapsedSuperTime = System.currentTimeMillis() - startSuperTime;
-            if (elapsedSuperTime >= timeLimitSuper) {
-                isSuper = false; // Desativa o modo super
-            }
-        }
->>>>>>> Stashed changes
     }
 
     @Override
@@ -161,37 +125,8 @@ public class Pacman extends Personagens {
     public int getScore() {
         return score;
     }
-    
-    public void setScore(int score){
-        this.score = score;
-    }
 
     public boolean isSuper() {
         return isSuper;
     }
-<<<<<<< Updated upstream
-=======
-    
-    public int getLifes(){
-        return lifes;
-    }
-    
-    public void setLifes(int lifes){
-        this.lifes = lifes;
-    }
-    
-    public void setPosition(int pacX, int pacY){
-        posX = pacX;
-        posY = pacY;
-    }
-    
-    public int getDirect(){
-        return direct;
-    }
-
-    public boolean isIsSuper() {
-        return isSuper;
-    }
-
->>>>>>> Stashed changes
 }
