@@ -2,6 +2,7 @@ package pacman;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+<<<<<<< Updated upstream
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -51,7 +52,38 @@ public class Fantasmas extends Personagens {
             currentImage = ghost3;
         }else{
             currentImage = ghost4;
-        }
-        g2.drawImage(currentImage, posX, posY, blockSize, blockSize, null);
+=======
+
+public abstract class Fantasmas extends Personagens {
+    protected Pathfinder pathfinder;
+
+    public Fantasmas(int startX, int startY, int speed, Pathfinder pathfinder) {
+        super(startX, startY, speed);
+        this.pathfinder = pathfinder;
     }
+
+    @Override
+    public abstract void update(KeyHandler keyH, int pacX, int pacY, Blinky blinky, Clyde clyde, Pinky pinky);
+
+    @Override
+    public abstract void draw(Graphics2D g2, int blockSize);
+    
+    public int runIsSuperX(Pacman pacman, int currentX){
+        if(pacman.posX - currentX > 0){
+            return 1;
+        }else{
+            return 29;
+>>>>>>> Stashed changes
+        }
+    }
+<<<<<<< Updated upstream
+=======
+    public int runIsSuperY(Pacman pacman, int currentY){
+        if(pacman.posY - currentY > 0){
+            return 1;
+        }else{
+            return 26;
+        }
+    }
+>>>>>>> Stashed changes
 }
