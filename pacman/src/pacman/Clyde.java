@@ -35,12 +35,13 @@ public class Clyde extends Fantasmas {
         }else if (distance <= escapeDistance) {
             ImageIcon icon = new ImageIcon(getClass().getResource("/pacman-art/clyde.png"));
             this.clyde = icon.getImage();
-            speed = 2;
+            speed = 1;
             targetX = 1;
             targetY = 1;
             startTime = System.currentTimeMillis();
             timerClyde();
         }else{
+            speed = 2;
             ImageIcon icon = new ImageIcon(getClass().getResource("/pacman-art/clyde.png"));
             this.clyde = icon.getImage();
             if(scape == false){
@@ -49,6 +50,11 @@ public class Clyde extends Fantasmas {
             }else{
                 targetX = 1;
                 targetY = 1;
+                if (!scape) {
+                    startTime = System.currentTimeMillis();
+                    scape = true;
+                }
+            timerClyde();
             }
         }
         
@@ -102,13 +108,11 @@ public class Clyde extends Fantasmas {
         posY = 14 * 24;
     }
     
-    public void timerClyde(){
+    public void timerClyde() {
         long elapsedTime = System.currentTimeMillis() - startTime;
-        System.out.println(System.currentTimeMillis() - startTime);
-        scape = true;
-            if (elapsedTime >= 300) {
-                startTime =  0;
-                scape = false;
-            }
+        if (elapsedTime >= 300) {
+            scape = false;
+            startTime = 0;
+        }
     }
 }

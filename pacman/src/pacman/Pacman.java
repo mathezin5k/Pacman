@@ -29,6 +29,7 @@ public class Pacman extends Personagens {
     private boolean movingUp, movingDown, movingLeft, movingRight;
     long timeLimitInMilliseconds = 300;
     long startTime = System.currentTimeMillis();
+    long startSuperTime;
 
     public Pacman(int startX, int startY, int speed, int[][] map) {
         super(startX, startY, speed);
@@ -124,8 +125,9 @@ public class Pacman extends Personagens {
                 map[gridY][gridX] = 0; // Marca a pílula como coletada
                 score += 10;
             } else if (map[gridY][gridX] == SUPER_PILL) {
-                map[gridY][gridX] = 0; // Marca a super pílula como coletada
+                map[gridY][gridX] = 0;
                 isSuper = true;
+                startSuperTime = System.currentTimeMillis();
                 score += 50;
             }
         }
@@ -135,6 +137,9 @@ public class Pacman extends Personagens {
                 score -= 1;
                 startTime = System.currentTimeMillis();
             }
+        }
+        if(isSuper){
+            timerSuper();
         }
     }
 
@@ -164,7 +169,7 @@ public class Pacman extends Personagens {
             left3 = ImageIO.read(getClass().getResource("/pacman-art/3-left.png"));
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }  
     }
 
     public int getScore() {
@@ -209,6 +214,14 @@ public class Pacman extends Personagens {
             }
         }
         return true;
+    }
+    
+    public void timerSuper() {
+        long elapsedTime = System.currentTimeMillis() - startSuperTime;
+        if (elapsedTime >= 5000) {
+            isSuper = false;
+            startSuperTime = 0;
+        }
     }
 }
 
